@@ -31,3 +31,7 @@ export interface splitType {
     user_id:Types.ObjectId,
     amount:number
 }
+
+export interface dbConnection{
+    isconnected?:number
+}
