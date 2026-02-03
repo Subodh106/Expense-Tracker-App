@@ -35,3 +35,8 @@ export interface splitType {
 export interface dbConnection{
     isconnected?:number
 }
+
+export interface UserData{
+    email:string,
+    password:string,
+}
