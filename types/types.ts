@@ -40,3 +40,8 @@ export interface UserData{
     email:string,
     password:string,
 }
+
+export interface jwtPayload{
+    id:string,
+    email?:string
+}

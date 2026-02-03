@@ -3,7 +3,6 @@ import { UserData } from "@/types/types"
 import axios from "axios"
 export const sendRequest = async(data:UserData):Promise<void>=>{
     try {
-        console.log(data)
         const response = await axios.post("/api/log-in",data,{
         headers: {
           "Content-Type": "application/json"

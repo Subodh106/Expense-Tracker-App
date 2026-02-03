@@ -23,4 +23,4 @@ const UserModel:Schema<UserType> = new Schema({
     ]
 },{timestamps:true})
 
-export const user = (mongoose.models.User as mongoose.Model<UserType>)||(mongoose.model<UserType>("User",UserModel))
+export const User = (mongoose.models.User as mongoose.Model<UserType>)||(mongoose.model<UserType>("User",UserModel))

@@ -4,13 +4,12 @@ import { sendRequest } from "@/helpers/setRequest"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { UserData } from "@/types/types"
-
+import { getCookie } from "@/lib/auth"
 
 const page = () => {
   // const[username,setUsername]=useState<string>("")
   const[password,setPassword]=useState<string>("")
   const[email,setEmail]=useState<string>("")
-
   const handleSubmit =()=>{
     const data = {
       email:email,

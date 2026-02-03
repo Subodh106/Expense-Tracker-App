@@ -1,12 +1,8 @@
 import jwt from "jsonwebtoken";
-
-const secret = "adfsafsfs";
-if(!secret){
-    throw new Error("Jwt secret is not defined")
-}
+import { getJwtSecret } from "./getJwtSecret";
 
 
 export const createJWT = (id:string)=>{
-    const token = jwt.sign(id,secret);
+    const token = jwt.sign(id,getJwtSecret());
     return token
 }

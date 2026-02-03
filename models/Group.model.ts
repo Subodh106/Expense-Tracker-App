@@ -27,4 +27,4 @@ const GroupModel:Schema<GroupType> = new Schema({
     }]
 },{timestamps:true})
 
-export const group = (mongoose.models.Group as mongoose.Model<GroupType>)||(mongoose.model<GroupType>("Group",GroupModel))
+export const Group = (mongoose.models.Group as mongoose.Model<GroupType>)||(mongoose.model<GroupType>("Group",GroupModel))

@@ -1,5 +1,5 @@
 import connectdb from "@/db/connectDb"
-import { user } from "@/models/User.model";
+import { User } from "@/models/User.model";
 import { verifyPassword } from "@/helpers/verifyPassword";
 import { setCookies } from "@/helpers/setCookies";
 import { createJWT } from "@/helpers/createJwt";
@@ -10,7 +10,8 @@ export async function POST(req:Request) {
         if(email==""||password==""){
             return Response.json({message:"Something is missing"},{status:422})
         }
-        const isUserExist = await user.findOne({email});
+        const isUserExist = await 
+        User.findOne({email});
         if(!isUserExist){
             return Response.json({message:"User doesn't exist . Please create your account"},{status:401})
         }
