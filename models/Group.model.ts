@@ -18,11 +18,10 @@ const GroupModel:Schema<GroupType> = new Schema({
             ref:"User",
             required:true,
         },
-        role:{
+        roles:{
             type:String,
             required:true,
             enum:["admin","creator","member"],
-            default:"member"
         }
     }]
 },{timestamps:true})

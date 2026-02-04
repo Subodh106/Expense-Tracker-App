@@ -1,13 +1,12 @@
 "use client"
 import { GroupData, UserData } from "@/types/types"
 import axios from "axios"
-export const sendRequest = async(data:UserData):Promise<void>=>{
+export const creategroupReq = async(data:GroupData):Promise<void>=>{
     try {
-        const response = await axios.post("/api/log-in",data,{
+        const response = await axios.post("/api/create-group",data,{
         headers: {
           "Content-Type": "application/json"
         }})
-
         const datas = await response.data
         return datas
     } catch (error:any) {

@@ -45,3 +45,7 @@ export interface jwtPayload{
     id:string,
     email?:string
 }
+
+export interface GroupData{
+    group_name:string
+}
