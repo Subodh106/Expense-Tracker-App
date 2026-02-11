@@ -49,3 +49,10 @@ export interface jwtPayload{
 export interface GroupData{
     group_name:string
 }
+
+export interface ExpenseData{
+    group_id:Number,
+    split:splitType[],
+    total_amount:Number,
+    description:string
+}

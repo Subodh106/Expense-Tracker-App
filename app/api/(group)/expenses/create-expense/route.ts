@@ -2,22 +2,32 @@ import connectdb from "@/db/connectDb"
 import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model"
+import { Types } from "mongoose";
 
 export async function POST(req: Request) {
     try {
+        console.log("fdsaf")
         await connectdb()
         const id = await getInfo();
         if (!id) {
             return Response.json({ message: "Unauthorized access" }, { status: 401 })
         }
-        const { group_id, split, user_id, total_amount, description } = await req.json();
-        if (!group_id || !split?.length || !user_id || total_amount <= 0) {
+        const { group_id, split, total_amount, description } = await req.json();
+        if (!group_id || !split?.length || total_amount <= 0) {
             return Response.json({ message: "Something is missing" }, { status: 422 })
         }
-        const isgroupExist = await Group.findById(group_id);
+        if (!Types.ObjectId.isValid(group_id)) {
+        return Response.json({ message: "Invalid group id format" }, { status: 400 });
+        }
+
+        const groupObjectId = new Types.ObjectId(group_id)
+        console.log(groupObjectId)
+        const isgroupExist = await Group.findById(groupObjectId);
+        console.log(isgroupExist)
         if (!isgroupExist) {
             return Response.json({ message: "Group doesn't exist" }, { status: 403 })
         }
+        console.log("asf")
         const isMember = isgroupExist.member.some(
             (m: any) => m.user_id.toString() === id
         );
@@ -33,7 +43,7 @@ export async function POST(req: Request) {
             return Response.json({ message: "Unauthorized access" }, { status: 403 });
         }
         const isPayerInGroup = isgroupExist.member.some(
-            (m: any) => m.user_id.toString() === user_id
+            (m: any) => m.user_id.toString() === id
         );
 
         if (!isPayerInGroup) {
@@ -57,7 +67,6 @@ export async function POST(req: Request) {
             }
 
             usedAmount += Number(s.amount);
-
             finalsplit.push({
                 user_id: s.user_id,
                 amount: Number(s.amount)
@@ -93,7 +102,7 @@ export async function POST(req: Request) {
 
         const expenseData = {
             group_id: group_id,
-            paid_by: user_id,
+            paid_by: id,
             total_amount: total_amount,
             description: description,
             split: finalsplit,
