@@ -2,11 +2,10 @@ import connectdb from "@/db/connectDb"
 import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model"
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 export async function POST(req: Request) {
     try {
-        console.log("fdsaf")
         await connectdb()
         const id = await getInfo();
         if (!id) {
@@ -16,18 +15,15 @@ export async function POST(req: Request) {
         if (!group_id || !split?.length || total_amount <= 0) {
             return Response.json({ message: "Something is missing" }, { status: 422 })
         }
-        if (!Types.ObjectId.isValid(group_id)) {
-        return Response.json({ message: "Invalid group id format" }, { status: 400 });
-        }
 
-        const groupObjectId = new Types.ObjectId(group_id)
-        console.log(groupObjectId)
-        const isgroupExist = await Group.findById(groupObjectId);
-        console.log(isgroupExist)
+        if(!mongoose.Types.ObjectId.isValid(group_id)){
+            return Response.json({message:"Invalid id formate"},{status:400})
+        }
+        const isgroupExist = await Group.findOne({_id:new Types.ObjectId(group_id)});
+
         if (!isgroupExist) {
             return Response.json({ message: "Group doesn't exist" }, { status: 403 })
         }
-        console.log("asf")
         const isMember = isgroupExist.member.some(
             (m: any) => m.user_id.toString() === id
         );
@@ -36,9 +32,8 @@ export async function POST(req: Request) {
             return Response.json({ message: "Not group member" }, { status: 403 });
         }
 
-        const invalidUser = split.find((split: any) => !isgroupExist.member.some(member => member.user_id === split.user_id)
+        const invalidUser = split.find((split: any) => isgroupExist.member.some(member => member.user_id === split.user_id)
         );
-
         if (invalidUser) {
             return Response.json({ message: "Unauthorized access" }, { status: 403 });
         }
