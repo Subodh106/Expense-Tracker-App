@@ -55,7 +55,7 @@ export async function POST(req: Request) {
         let finalsplit: any[] = [];
         let usedAmount = 0;
 
-        // 3. Manual split processing
+        // 3. Manual split processing 
         for (const s of mannulsplits) {
             if (s.amount <= 0) {
                 return Response.json({ message: "Invalid split amount" }, { status: 400 });
