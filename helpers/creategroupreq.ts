@@ -3,7 +3,7 @@ import { GroupData, UserData } from "@/types/types"
 import axios from "axios"
 export const creategroupReq = async(data:GroupData):Promise<void>=>{
     try {
-        const response = await axios.post("/api/group/create-group",data,{
+        const response = await axios.post("/api/groups/create-group",data,{
         headers: {
           "Content-Type": "application/json"
         }})

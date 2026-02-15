@@ -7,6 +7,7 @@ export  async function getInfo() {
             return 
         }
         const token = cookie?.toString()
+        console.log(token)
         const id = decodeJwt(token)
         return id.toString()
     } catch (error:any) {

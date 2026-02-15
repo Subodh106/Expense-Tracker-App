@@ -8,6 +8,7 @@ export async function POST(req: Request) {
     try {
         await connectdb()
         const id = await getInfo();
+        console.log(id)
         if (!id) {
             return Response.json({ message: "Unauthorized access" }, { status: 401 })
         }
