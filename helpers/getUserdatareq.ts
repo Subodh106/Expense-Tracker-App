@@ -1,9 +1,9 @@
 "use client"
 import axios from "axios";
 
-export async function getexpensereq() {
+export async function getUserDatareq() {
     try {
-        const response = await axios.get("/api/groups/get-expenses?groupId=698c540b738b7771f02d9c4f");
+        const response = await axios.get("/api/user/get-data");
         const data = await response.data;
         return data
     } catch (error:any) {

@@ -9,6 +9,7 @@ const page = () => {
       <Link href="/log-in"> <Button className='cursor-pointer'>login</Button></Link>
       <Link href="/log-out"> <Button className='cursor-pointer m-5'>Log out</Button></Link>
       <Link href="/get-expense"><Button className='cursor-pointer m-5'>Get Expense</Button></Link>
+      <Link href="/get-user-data"><Button className='cursor-pointer m-5'>Get User Detail</Button></Link>
       <Link href="/create-expense"> <Button className='cursor-pointer m-5'>Create Expense</Button></Link>
     </div>
   )
