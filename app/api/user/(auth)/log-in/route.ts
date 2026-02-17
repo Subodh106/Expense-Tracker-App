@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         }
         const groups = await Group.find({"member.user_id":id})
         return Response.json({
-            message: "Data of user successfully fetched", data: {
+            message: "User logged in successfully", data: {
                 username: isUserExist.username,
                 email: isUserExist.email,
                 groups: groups,

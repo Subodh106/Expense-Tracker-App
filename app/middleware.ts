@@ -12,5 +12,5 @@ export async function middleware(req:NextRequest){
 }
 
 export const config={
-    matcher:['/api/group/*','/api/group/*','/api/get-data','/api/groups/get-expenses']
+    matcher:['/api/groups/*','/api/get-data',]
 }

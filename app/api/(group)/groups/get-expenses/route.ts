@@ -13,7 +13,6 @@ export async function GET(req:Request) {
             groupId:searchParams.get('groupId')
         }
         const id = await getInfo();
-        console.log(id)
         if(!id){
             return Response.json({message:"Unauthorized access"},{status:401})
         }
