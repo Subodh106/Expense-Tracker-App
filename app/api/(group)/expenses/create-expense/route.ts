@@ -2,20 +2,28 @@ import connectdb from "@/db/connectDb"
 import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model"
-import mongoose, { Types } from "mongoose";
+import { User } from "@/models/User.model";
+import mongoose, { mongo, Types } from "mongoose";
 
 export async function POST(req: Request) {
     try {
         await connectdb()
         const id = await getInfo();
-        console.log(id)
         if (!id) {
             return Response.json({ message: "Unauthorized access" }, { status: 401 })
+        }
+        if(!mongoose.Types.ObjectId.isValid(id?.toString())){
+            return Response.json({message:"Invalid id formate"},{status:400})
+        }
+        const isUserExist = await User.findById(new Types.ObjectId(id?.toString()));
+        if(!isUserExist){
+            return Response.json({message:"User doesn't exist"},{status:404})
         }
         const { group_id, split, total_amount, description } = await req.json();
         if (!group_id || !split?.length || total_amount <= 0) {
             return Response.json({ message: "Something is missing" }, { status: 422 })
         }
+        console.log(group_id)
 
         if(!mongoose.Types.ObjectId.isValid(group_id)){
             return Response.json({message:"Invalid id formate"},{status:400})
@@ -95,7 +103,7 @@ export async function POST(req: Request) {
             return Response.json({ message: "Split total mismatch with total amount" }, { status: 400 });
         }
 
-
+        console.log(group_id)
         const expenseData = {
             group_id: group_id,
             paid_by: id,

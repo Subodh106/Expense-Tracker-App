@@ -2,6 +2,7 @@ import connectdb from "@/db/connectDb"
 import { getInfo } from "@/helpers/getinfo"
 import { Expense } from "@/models/Expense.model"
 import { Group } from "@/models/Group.model"
+import { User } from "@/models/User.model"
 import mongoose, { Types } from "mongoose"
 
 
@@ -15,6 +16,13 @@ export async function GET(req:Request) {
         const id = await getInfo();
         if(!id){
             return Response.json({message:"Unauthorized access"},{status:401})
+        }
+        if(!mongoose.Types.ObjectId.isValid(id)){
+            return Response.json({message:"Invalid id formate"},{status:400})
+        }
+        const isUserExist = await User.findById(new Types.ObjectId(id?.toString()))
+        if(!isUserExist){
+            return Response.json({message:"User doesn't exist"},{status:404})
         }
         const groupId = queryParams.groupId as string;
         if(!mongoose.Types.ObjectId.isValid(groupId)){

@@ -2,11 +2,13 @@ import connectdb from "@/db/connectDb";
 import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model";
+import { User } from "@/models/User.model";
 import { Types } from "mongoose";
 import mongoose from "mongoose";
 
 export async function DELETE(req: Request) {
     try {
+        console.log()
         await connectdb()
         const id = await getInfo();
         if (!id) {
@@ -16,6 +18,13 @@ export async function DELETE(req: Request) {
         const queryParams = {
             groupId: searchParams.get('groupId'),
             expenseId: searchParams.get('expenseId')
+        }
+        if(!mongoose.Types.ObjectId.isValid(id?.toString())){
+            return Response.json({message:"Invalid id formate"},{status:400})
+        }
+        const isUserExist = await User.findById(new Types.ObjectId(id?.toString()))
+        if(!isUserExist){
+            return Response.json({message:"User doesn't exist"},{status:404})
         }
         const groupId = queryParams.groupId as string;
         const expenseId = queryParams.expenseId as string;
@@ -30,7 +39,7 @@ export async function DELETE(req: Request) {
         if (!isExpenseExist) {
             return Response.json({ mesage: "Expense doesn't exist" }, { status: 400 })
         }
-        const isExpenseExistInGroup = isExpenseExist.group_id === isGroupExist._id;
+        const isExpenseExistInGroup = isExpenseExist.group_id.toString() == isGroupExist._id.toString();
         if (!isExpenseExistInGroup) {
             return Response.json({ message: "Expense doesn't exist in that group" }, { status: 404 })
         }
