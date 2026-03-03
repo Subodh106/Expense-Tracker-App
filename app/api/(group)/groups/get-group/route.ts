@@ -36,8 +36,12 @@ export async function GET(req:Request) {
         if(isExpenseExist.length===0){
             return Response.json({message:"Expense doesn't exist"},{status:401})
         };
-
-        return Response.json({message:"Expense retrived successfully",data:isExpenseExist},{status:200})
+        return Response.json({message:"Expense retrived successfully",data:{
+            groupId:isGroupExit._id,
+            group_name:isGroupExit.group_name,
+            member:isGroupExit.member,
+            expenses:isExpenseExist
+        }},{status:200})
     } catch (error:any) {
         console.log("Error during getting expenses",error.message)
         return Response.json({message:"Error during getting expenses",error:error.message},{status:500})

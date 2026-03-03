@@ -11,7 +11,7 @@ export async function GET(req:Request) {
         const isUserauthorized = await User.findById(id);
         if(!isUserauthorized){
             return Response.json({message:"Unauthorized access"},{status:401})
-        }
+        }      
         const userId = await req.json()
         if(!userId){
             return Response.json({message:"Something is missing"},{status:402})
