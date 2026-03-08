@@ -4,33 +4,35 @@ import { verifyPassword } from "@/helpers/verifyPassword";
 import { setCookies } from "@/helpers/setCookies";
 import { createJWT } from "@/helpers/createJwt";
 import { Group } from "@/models/Group.model";
-export async function POST(req: Request) {
+import { NextRequest,NextResponse } from "next/server";
+export async function POST(req: NextRequest) {
     try {
         await connectdb()
         const { email, password } = await req.json();
+        console.log(email,password)
         if (email == "" || password == "") {
-            return Response.json({ message: "Something is missing" }, { status: 422 })
+            return NextResponse.json({ message: "Something is missing" }, { status: 422 })
         }
         const isUserExist = await
             User.findOne({ email });
         if (!isUserExist) {
-            return Response.json({ message: "User doesn't exist . Please create your account" }, { status: 401 })
+            return NextResponse.json({ message: "User doesn't exist . Please create your account" }, { status: 401 })
         }
         const isPasswordVerified = await verifyPassword(password, isUserExist.password);
         if (!isPasswordVerified) {
-            return Response.json({ message: "Invalid credentails" }, { status: 401 })
+            return NextResponse.json({ message: "Invalid credentails" }, { status: 401 })
         }
-        const id = isUserExist?._id;
+        const id = isUserExist?._id
         if (!id) {
-            return Response.json({ message: "User doesn't exist" }, { status: 409 })
+            return NextResponse.json({ message: "User doesn't exist" }, { status: 409 })
         }
         const token = createJWT(id.toString())
         const isCookieSet = await setCookies(token);
         if (!isCookieSet) {
-            return Response.json({ message: "Server Error" }, { status: 500 })
+            return NextResponse.json({ message: "Server Error" }, { status: 500 })
         }
         const groups = await Group.find({"member.user_id":id})
-        return Response.json({
+        return NextResponse.json({
             message: "User logged in successfully", data: {
                 username: isUserExist.username,
                 email: isUserExist.email,
@@ -39,6 +41,6 @@ export async function POST(req: Request) {
         }, { status: 200 })
     } catch (error: any) {
         console.log("Error during login user:", error.message)
-        return Response.json({ message: "Error druing login user", error: error.message }, { status: 500 })
+        return NextResponse.json({ message: "Error during login user", error: error.message }, { status: 500 })
     }
 }
