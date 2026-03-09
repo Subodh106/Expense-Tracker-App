@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 
 
 export async function middleware(req:NextRequest){
+    console.log('adf')
     const token = req.cookies.get("token")?.value
     if(!token){
         return NextResponse.json({message:"Unauthorized access"},{status:401})

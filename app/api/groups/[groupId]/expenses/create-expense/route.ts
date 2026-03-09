@@ -4,54 +4,55 @@ import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model"
 import { User } from "@/models/User.model";
 import mongoose, { mongo, Types } from "mongoose";
+import { NextResponse , NextRequest } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     try {
         await connectdb()
         const id = await getInfo();
         if (!id) {
-            return Response.json({ message: "Unauthorized access" }, { status: 401 })
+            return NextResponse.json({ message: "Unauthorized access" }, { status: 401 })
         }
         if(!mongoose.Types.ObjectId.isValid(id?.toString())){
-            return Response.json({message:"Invalid id formate"},{status:400})
+            return NextResponse.json({message:"Invalid id formate"},{status:400})
         }
         const isUserExist = await User.findById(new Types.ObjectId(id?.toString()));
         if(!isUserExist){
-            return Response.json({message:"User doesn't exist"},{status:404})
+            return NextResponse.json({message:"User doesn't exist"},{status:404})
         }
         const { group_id, split, total_amount, description } = await req.json();
         if (!group_id || !split?.length || total_amount <= 0) {
-            return Response.json({ message: "Something is missing" }, { status: 422 })
+            return NextResponse.json({ message: "Something is missing" }, { status: 422 })
         }
         console.log(group_id)
 
         if(!mongoose.Types.ObjectId.isValid(group_id)){
-            return Response.json({message:"Invalid id formate"},{status:400})
+            return NextResponse.json({message:"Invalid id formate"},{status:400})
         }
         const isgroupExist = await Group.findOne({_id:new Types.ObjectId(group_id)});
 
         if (!isgroupExist) {
-            return Response.json({ message: "Group doesn't exist" }, { status: 403 })
+            return NextResponse.json({ message: "Group doesn't exist" }, { status: 403 })
         }
         const isMember = isgroupExist.member.some(
             (m: any) => m.user_id.toString() === id
         );
 
         if (!isMember) {
-            return Response.json({ message: "Not group member" }, { status: 403 });
+            return NextResponse.json({ message: "Not group member" }, { status: 403 });
         }
 
         const invalidUser = split.find((split: any) => isgroupExist.member.some(member => member.user_id === split.user_id)
         );
         if (invalidUser) {
-            return Response.json({ message: "Unauthorized access" }, { status: 403 });
+            return NextResponse.json({ message: "Unauthorized access" }, { status: 403 });
         }
         const isPayerInGroup = isgroupExist.member.some(
             (m: any) => m.user_id.toString() === id
         );
 
         if (!isPayerInGroup) {
-            return Response.json({ message: "Payer not in group" }, { status: 403 });
+            return NextResponse.json({ message: "Payer not in group" }, { status: 403 });
         }
 
         // ================= BUSINESS LOGIC =================
@@ -67,7 +68,7 @@ export async function POST(req: Request) {
         // 3. Manual split processing 
         for (const s of mannulsplits) {
             if (s.amount <= 0) {
-                return Response.json({ message: "Invalid split amount" }, { status: 400 });
+                return NextResponse.json({ message: "Invalid split amount" }, { status: 400 });
             }
 
             usedAmount += Number(s.amount);
@@ -81,7 +82,7 @@ export async function POST(req: Request) {
         const remainingAmount = Number(total_amount) - usedAmount;
 
         if (remainingAmount < 0) {
-            return Response.json({ message: "Split amount exceeds total amount" }, { status: 400 });
+            return NextResponse.json({ message: "Split amount exceeds total amount" }, { status: 400 });
         }
 
         // 5. Equal split logic
@@ -100,7 +101,7 @@ export async function POST(req: Request) {
         const finaltotal = finalsplit.reduce((sum, s) => sum + s.amount, 0);
 
         if (Number(finaltotal.toFixed(2)) !== Number(Number(total_amount).toFixed(2))) {
-            return Response.json({ message: "Split total mismatch with total amount" }, { status: 400 });
+            return NextResponse.json({ message: "Split total mismatch with total amount" }, { status: 400 });
         }
 
         console.log(group_id)
@@ -114,12 +115,12 @@ export async function POST(req: Request) {
         }
         const created_Expense = await Expense.create(expenseData);
         if (!created_Expense) {
-            return Response.json({ message: `Internal Error druing creating expense` }, { status: 500 })
+            return NextResponse.json({ message: `Internal Error druing creating expense` }, { status: 500 })
         };
-        return Response.json({ message: "Expense created successfully", data: expenseData }, { status: 201 });
+        return NextResponse.json({ message: "Expense created successfully", data: expenseData }, { status: 201 });
 
     } catch (error: any) {
         console.log("Error during creating expense:", error.message)
-        return Response.json({ message: "Error during creating expense", error: error.message }, { status: 500 })
+        return NextResponse.json({ message: "Error during creating expense", error: error.message }, { status: 500 })
     }
 }
