@@ -8,11 +8,9 @@ export async function POST(req:NextRequest) {
     try {
         await connectdb();
         const id = await getInfo()
-        console.log('as')
         if(!id){
             return NextResponse.json({message:"Unauthorized access"},{status:401})
         }
-        console.log('da')
         if(!mongoose.Types.ObjectId.isValid(id.toString())){
             return NextResponse.json({message:"Invalid id formate"},{status:400})
         }

@@ -56,3 +56,11 @@ export interface ExpenseData{
     total_amount:Number,
     description:string
 }
+
+export interface GroupInvitesModelType extends Document{
+    id:Types.ObjectId;
+    group_id:Types.ObjectId;
+    invitedUser_id:Types.ObjectId;
+    invitedBy:Types.ObjectId;
+    status:String;
+}

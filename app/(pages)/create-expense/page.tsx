@@ -7,7 +7,6 @@ import { ExpenseData } from "@/types/types"
 const page = () => {
 
   const data = {
-    group_id:"699519ee0b7028e458c40bb7",
     split:[
         {
         user_id:"698080b1a5595d4398de252c",

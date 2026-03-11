@@ -6,7 +6,7 @@ import { User } from "@/models/User.model";
 import mongoose, { mongo, Types } from "mongoose";
 import { NextResponse , NextRequest } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest,{params}:{params:Promise<{groupId:string}>}) {
     try {
         await connectdb()
         const id = await getInfo();
@@ -20,16 +20,15 @@ export async function POST(req: NextRequest) {
         if(!isUserExist){
             return NextResponse.json({message:"User doesn't exist"},{status:404})
         }
-        const { group_id, split, total_amount, description } = await req.json();
-        if (!group_id || !split?.length || total_amount <= 0) {
+        const {groupId} = await params;
+        const { split, total_amount, description } = await req.json();
+        if (!groupId || !split?.length || total_amount <= 0) {
             return NextResponse.json({ message: "Something is missing" }, { status: 422 })
         }
-        console.log(group_id)
-
-        if(!mongoose.Types.ObjectId.isValid(group_id)){
+        if(!mongoose.Types.ObjectId.isValid(groupId)){
             return NextResponse.json({message:"Invalid id formate"},{status:400})
         }
-        const isgroupExist = await Group.findOne({_id:new Types.ObjectId(group_id)});
+        const isgroupExist = await Group.findOne({_id:new Types.ObjectId(groupId)});
 
         if (!isgroupExist) {
             return NextResponse.json({ message: "Group doesn't exist" }, { status: 403 })
@@ -104,9 +103,9 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "Split total mismatch with total amount" }, { status: 400 });
         }
 
-        console.log(group_id)
+        console.log(groupId)
         const expenseData = {
-            group_id: group_id,
+            group_id: groupId,
             paid_by: id,
             total_amount: total_amount,
             description: description,
