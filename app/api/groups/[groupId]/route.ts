@@ -10,8 +10,7 @@ import { NextResponse} from "next/server";
 // for deleting group
 export async function DELETE( _:any,{params}:{params:Promise<{groupId:string}>}) {
     try {
-        await connectdb()
-        console.log('asf')
+        await connectdb();
         const id = await getInfo();
         const { groupId } = await params;
         if(!groupId){
