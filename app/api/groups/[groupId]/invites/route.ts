@@ -47,6 +47,10 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{groupId:str
         if(isInvitedUserAlreadyInThisGroup){
             return NextResponse.json({message:"User is already in this group"},{status:402})
         }
+       const isUserAlreadyInvited = await GroupInvite.findOne({invitedUser_id:invitedUser_id,group_id:groupId});
+       if(isUserAlreadyInvited){
+            return NextResponse.json({message:"User is already invited"},{status:409})
+       }
         const createdInvite = await GroupInvite.create({
             group_id:groupId,
             invitedUser_id:invitedUser_id,
