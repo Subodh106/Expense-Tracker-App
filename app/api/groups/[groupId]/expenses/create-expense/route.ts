@@ -22,7 +22,7 @@ export async function POST(req: NextRequest,{params}:{params:Promise<{groupId:st
         }
         const {groupId} = await params;
         const { split, total_amount, description } = await req.json();
-        if (!groupId || !split?.length || total_amount <= 0) {
+        if (!groupId ||  total_amount <= 0) {
             return NextResponse.json({ message: "Something is missing" }, { status: 422 })
         }
         if(!mongoose.Types.ObjectId.isValid(groupId)){

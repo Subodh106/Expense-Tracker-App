@@ -18,8 +18,14 @@ const UserModel:Schema<UserType> = new Schema({
     },
     groups:[
         {
+        group_id:{
             type:mongoose.Types.ObjectId,
-            ref:"Group"
+            ref:"Group" 
+        },
+        group_name:{
+            type:String,
+            require:true
+        }
         }
     ]
 },{timestamps:true})

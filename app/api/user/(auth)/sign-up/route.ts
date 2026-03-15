@@ -18,7 +18,7 @@ export async function POST(req:NextRequest) {
             return NextResponse.json({message:"User already exist , Please login !"},{status:409})
         }
         const isUsernameUnique = await User.findOne({username});
-        if(!isUsernameUnique){
+        if(isUsernameUnique){
             return NextResponse.json({message:"Username is already taken"},{status:409})
         }
         const hashedPassword= await hashPassword(password);

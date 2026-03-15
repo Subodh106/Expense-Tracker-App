@@ -4,13 +4,18 @@ export interface UserType extends Document{
     username:string,
     email:string,
     password:string,
-    groups:Types.ObjectId[]
+    groups:groups[]
 }
 
 export interface GroupType extends Document{
     group_name:string,
     created_by:Types.ObjectId,
     member:memberType[]
+}
+
+interface groups{
+    group_id:Types.ObjectId,
+    group_name:string
 }
 
 export interface ExpenseType extends Document{

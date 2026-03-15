@@ -35,11 +35,9 @@ export async function PUT(req:NextRequest,{params}:{params:Promise<{inviteId:str
         if(!isGroupExist){
             return NextResponse.json({message:"Group doesn't exist"},{status:404});
         }
-        isGroupExist.member.push({user_id:new Types.ObjectId(id?.toString()),roles:"member"});
-        isGroupExist.save();
-        isInviteExist.status="accepted";
+        isInviteExist.status="rejected";
         isInviteExist.save();
-        return NextResponse.json({message:"Accepted the request successfully"},{status:200});
+        return NextResponse.json({message:"Rejected the request successfully"},{status:200});
     } catch (error:any) {
         console.log("Error during accepting the invites:",error.message);
         return NextResponse.json({message:"Error during accepting the invites",error:error.message},{status:500});

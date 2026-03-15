@@ -33,6 +33,12 @@ export async function POST(req:NextRequest) {
         const createdGroup = await Group.create({
             group_name:group_name,created_by:id,member:[{user_id:id,roles:"creator"}]
         })
+        isUserExist.groups.push({
+            group_id:new Types.ObjectId(createdGroup._id),
+            group_name:createdGroup.group_name
+
+        })
+        isUserExist.save();
         return NextResponse.json({message:"Group created successfully",data:createdGroup},{status:201})
     } catch (error:any) {
         console.log("Error during creating group:",error.message);
