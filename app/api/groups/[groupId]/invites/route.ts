@@ -22,6 +22,7 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{groupId:str
             return NextResponse.json({message:"User doesn't exist"},{status:404})
         }
         const {groupId} = await params;
+        console.log(groupId)
         if(!Types.ObjectId.isValid(groupId.toString())){
             return NextResponse.json({message:"Invalid Id formate"},{status:400});
         };
@@ -29,17 +30,13 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{groupId:str
         if(!isGroupExist){
             return NextResponse.json({message:"Group doesn't exist"},{status:404})
         }
-        console.log(id)
-        console.log(groupId)
         const isUserExistInGroup = isGroupExist.member.some((user:any)=>{
-            console.log(user.user_id);
-            console.log(id)
-            return user.user_id===id.toString()});
-        console.log(isUserExistInGroup)
+            return (user.user_id).toString()===id});  
         if(!isUserExistInGroup){
             return NextResponse.json({message:"Unauthorized access"},{status:401})
         }
         const {invitedUser_id} = await req.json();
+        console.log("req:" , invitedUser_id);
         if(!invitedUser_id){
             return NextResponse.json({message:"Something is missing "},{status:422});
         }

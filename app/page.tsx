@@ -12,6 +12,9 @@ const page = () => {
       <Link href="/delete-expense"> <Button className='cursor-pointer m-5'>Delete Expense</Button></Link>
       <Link href="/get-expense"><Button className='cursor-pointer m-5'>Get Expense</Button></Link>
       <Link href="/get-user-data"><Button className='cursor-pointer m-5'>Get User Detail</Button></Link>
+      <Link href="/send-invites"><Button className='cursor-pointer m-5'>Send invites</Button></Link>
+      <Link href="/invites/accept"><Button className='cursor-pointer m-5'>accept invites</Button></Link>
+      <Link href="/invites/reject"><Button className='cursor-pointer m-5'>Reject invites</Button></Link>
       <Link href="/create-expense"> <Button className='cursor-pointer m-5'>Create Expense</Button></Link>
     </div>
   )
