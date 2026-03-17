@@ -3,7 +3,7 @@ import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model"
 import { User } from "@/models/User.model";
-import mongoose, { mongo, Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { NextResponse , NextRequest } from "next/server";
 
 export async function POST(req: NextRequest,{params}:{params:Promise<{groupId:string}>}) {
@@ -40,7 +40,6 @@ export async function POST(req: NextRequest,{params}:{params:Promise<{groupId:st
         if (!isMember) {
             return NextResponse.json({ message: "Not group member" }, { status: 403 });
         }
-
         const invalidUser = split.find((split: any) => isgroupExist.member.some(member => member.user_id === split.user_id)
         );
         if (invalidUser) {

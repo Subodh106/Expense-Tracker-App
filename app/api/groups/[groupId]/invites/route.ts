@@ -9,10 +9,11 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req:NextRequest,{params}:{params:Promise<{groupId:string}>}) {
     try {
         await connectdb();
-        const id = getInfo() ;
+        const id = await getInfo() ;
         if(!id){
             return NextResponse.json({message:"Unauthorized access"},{status:401});
         };
+        console.log(id)
         if(!Types.ObjectId.isValid(id?.toString())){
             return NextResponse.json({message:"Invalid id formate"},{status:400})
         }
@@ -28,7 +29,13 @@ export async function POST(req:NextRequest,{params}:{params:Promise<{groupId:str
         if(!isGroupExist){
             return NextResponse.json({message:"Group doesn't exist"},{status:404})
         }
-        const isUserExistInGroup = isGroupExist.member.some((user:any)=>user.user_id===id);
+        console.log(id)
+        console.log(groupId)
+        const isUserExistInGroup = isGroupExist.member.some((user:any)=>{
+            console.log(user.user_id);
+            console.log(id)
+            return user.user_id===id.toString()});
+        console.log(isUserExistInGroup)
         if(!isUserExistInGroup){
             return NextResponse.json({message:"Unauthorized access"},{status:401})
         }

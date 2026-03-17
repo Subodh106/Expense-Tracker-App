@@ -9,11 +9,14 @@ const page = () => {
   const data = {
     split:[
         {
-        user_id:"698080b1a5595d4398de252c",
+        user_id:"69b6e6fcc46d85351507d3e2",
         amount:500
-    }
+      },{
+        user_id:"69ada625a8319db0880fd5d8",
+        amount:100
+      }
     ],
-    total_amount:500,
+    total_amount:600,
     description: "New expense"
 }
   const handleSubmit = ()=>{
