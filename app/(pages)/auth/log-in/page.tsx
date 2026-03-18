@@ -59,6 +59,7 @@ const LoginPage = () => {
               placeholder="example@gmail.com"
               autoComplete='email'
               {...register("email")}
+              required
             />
             {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
           </div>
@@ -71,20 +72,22 @@ const LoginPage = () => {
             <Input
               id="password"
               type="password"
+              placeholder='Enter your password'
               autoComplete='current-password'
               {...register("password")}
+              required
             />
             {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
           </div>
           {serverErrors && <p className='text-sm text-red-500'>{serverErrors}</p>}
-          <Button className='w-full' type='submit' disabled={loading}>
+          <Button className='w-full cursor-pointer' type='submit' disabled={loading}>
             {loading ? "Logging in..." : "Log In"}
           </Button>
         </form>
       </CardContent>
       <CardContent>
         <Link href="/auth/sign-up">
-          <Button variant="outline" className='w-full'>Create an Account</Button>
+          <Button variant="outline" className='w-full cursor-pointer'>Create an Account</Button>
         </Link>
       </CardContent>
     </Card>
