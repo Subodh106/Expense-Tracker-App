@@ -69,3 +69,4 @@ export interface GroupInvitesModelType extends Document{
     invitedBy:Types.ObjectId;
     status:String;
 }
+

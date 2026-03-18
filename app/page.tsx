@@ -1,23 +1,16 @@
-
 import React from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-const page = () => {
-  return (
-    <div>
-      <Link href="/create-group"><Button className='cursor-pointer'>Create Group</Button></Link>
-      <Link href="/log-in"> <Button className='cursor-pointer'>login</Button></Link>
-      <Link href="/log-out"> <Button className='cursor-pointer m-5'>Log out</Button></Link>
-      <Link href="/delete-group"> <Button className='cursor-pointer m-5'>Delete Group</Button></Link>
-      <Link href="/delete-expense"> <Button className='cursor-pointer m-5'>Delete Expense</Button></Link>
-      <Link href="/get-expense"><Button className='cursor-pointer m-5'>Get Expense</Button></Link>
-      <Link href="/get-user-data"><Button className='cursor-pointer m-5'>Get User Detail</Button></Link>
-      <Link href="/send-invites"><Button className='cursor-pointer m-5'>Send invites</Button></Link>
-      <Link href="/invites/accept"><Button className='cursor-pointer m-5'>accept invites</Button></Link>
-      <Link href="/invites/reject"><Button className='cursor-pointer m-5'>Reject invites</Button></Link>
-      <Link href="/create-expense"> <Button className='cursor-pointer m-5'>Create Expense</Button></Link>
-    </div>
-  )
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation';
+
+
+const page = async() => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token");
+  if(!token){
+    redirect("/auth/log-in")
+  }else{
+    redirect("/dashboard")
+  }
 }
 
 export default page
