@@ -59,7 +59,6 @@ const LoginPage = () => {
               placeholder="example@gmail.com"
               autoComplete='email'
               {...register("email")}
-              required
             />
             {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
           </div>
@@ -75,7 +74,6 @@ const LoginPage = () => {
               placeholder='Enter your password'
               autoComplete='current-password'
               {...register("password")}
-              required
             />
             {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
           </div>

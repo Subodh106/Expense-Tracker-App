@@ -1,6 +1,7 @@
-import React from 'react'
+import { getCookie } from "@/lib/auth"
+;
 
-const page = () => {
+const page = async() => {
   return (
     <div>
       daff
