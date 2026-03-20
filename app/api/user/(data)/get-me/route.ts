@@ -3,7 +3,7 @@ import { getInfo } from "@/helpers/getinfo"
 import { Group } from "@/models/Group.model";
 import { User } from "@/models/User.model";
 import {Types} from "mongoose";
-import { NextResponse , NextRequest } from "next/server";
+import { NextResponse} from "next/server";
 
 export async function GET() {
     try {
@@ -17,6 +17,7 @@ export async function GET() {
             return NextResponse.json({message:"Unauthorized access"},{status:401})
         }      
         const isUserExist = await User.findById(new Types.ObjectId(id))
+        console.log(isUserExist)
         if(!isUserExist){
             return NextResponse.json({message:"User doesn't exist"},{status:400})
         }

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
-const Navbar = () => {
+const Navbar = ({username}:{username:string}) => {
     const router = useRouter();
     const[loading , setLoading] = useState(false)
     const handleLogOut = async()=>{
@@ -30,7 +30,7 @@ const Navbar = () => {
         </div>
         <div className='flex justify-center items-center gap-4 p-1 mx-4'>
             <span className='text-sm text-gray-600'>
-                User
+                {username}
             </span>
             <span>
                 <Button onClick={handleLogOut} className='cursor-pointer w-full mx-auto' disabled={loading}>

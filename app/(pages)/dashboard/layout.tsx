@@ -1,18 +1,18 @@
+
 import Navbar from "@/components/web/navbar";
-import axios from "axios";
-import { ReactNode, useEffect } from "react";
+import { getUser } from "@/helpers/getUser";
+import { ReactNode } from "react";
+import { redirect } from "next/navigation";
 
 
-export default function dashboardLayout({children}:{children:ReactNode}){
-    const getdata = async()=>{
-        await axios.get("/api/user/get-data")
-    }
-    useEffect(()=>{
-        getdata();
-    },[])
+export default async function dashboardLayout({children}:{children:ReactNode}){
+        const user = await getUser();
+        console.log(user)
+
+    
     return(
         <>
-            <Navbar/>
+            <Navbar username = {"user"}/>
             {children}
         </>
     )
