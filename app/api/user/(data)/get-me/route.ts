@@ -21,7 +21,8 @@ export async function GET() {
         if(!isUserExist){
             return NextResponse.json({message:"User doesn't exist"},{status:400})
         }
-        const isUseringroups = await Group.findById({"member.user_id":id});
+        
+        const isUseringroups = await Group.find({"member.user_id":id});
         return NextResponse.json({message:"Data of user successfully fetched",data:{
             username:isUserExist.username,
             email:isUserExist.email,

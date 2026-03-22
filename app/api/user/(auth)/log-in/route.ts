@@ -13,8 +13,7 @@ export async function POST(req: NextRequest) {
         if (email == "" || password == "") {
             return NextResponse.json({ message: "Something is missing" }, { status: 422 })
         }
-        const isUserExist = await
-            User.findOne({ email });
+        const isUserExist = await User.findOne({ email });
         if (!isUserExist) {
             return NextResponse.json({ message: "User doesn't exist . Please create your account" }, { status: 401 })
         }

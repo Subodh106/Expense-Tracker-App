@@ -9,8 +9,6 @@ export  async function getCookie() {
         if(!hascookies){
             return "Cookies doesn't exist"
         }
-        console.log(hascookies)
-        console.log(token)
         return token;
     } catch (error:any) {
         console.log("Error during retriving token:",error.message);

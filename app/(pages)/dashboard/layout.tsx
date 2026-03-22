@@ -1,19 +1,43 @@
-
+'use client'
 import Navbar from "@/components/web/navbar";
-import { getUser } from "@/helpers/getUser";
-import { ReactNode } from "react";
-import { redirect } from "next/navigation";
+import { getuser } from "@/helpers/getUser"; 
+import { ReactNode, useEffect, useState } from "react";;
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+    const [username,setUsername] = useState("");
+    const [loading , setLoading] = useState(true);
+    const router = useRouter();
+    useEffect(()=>{
+        getUserData();
+    },[router])
 
-export default async function dashboardLayout({children}:{children:ReactNode}){
-        const user = await getUser();
-        console.log(user)
-
-    
-    return(
+    console.log(router)
+    const getUserData = async()=>{
+        try {
+            setLoading(true)
+            const response = await getuser();
+            if(!response.user || !response.success){
+                router.push("/auth/log-in")
+            }
+            setUsername(response?.user?.data?.username)
+        } catch (errors:any) {
+            toast.error(errors?.error||"Something went wrong")
+        }
+        finally{
+            setLoading(false)
+        }
+    }
+    if(loading){
+        return null
+    }
+    return (
         <>
-            <Navbar username = {"user"}/>
-            {children}
+            <Navbar username={username} />
+            <main>
+                {children}
+            </main>
         </>
-    )
+    );
 }

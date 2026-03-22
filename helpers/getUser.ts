@@ -1,15 +1,22 @@
-
+"use client"
 import axios from "axios";
 
-export async function getUser() {
-  try {
-    const res = await axios.get(`/api/user/get-me`, {
-      withCredentials: true, // sends cookies if auth is stored in cookies
-    });
-    console.log('asdf')
-    if (res.status === 200) return res.data; // user info
-    return null;
-  } catch (err) {
-    return null; // user not logged in or API error
-  }
+export async function getuser() {
+    try {
+        const res = await axios.get("/api/user/get-me");
+
+        return {
+            success: true,
+            user: res.data
+        };
+
+    } catch (error: any) {
+        console.log("getUser error:", error?.response?.status);
+
+        return {
+            success: false,
+            user: null,
+            error:error?.response?.data?.message
+        };
+    }
 }
