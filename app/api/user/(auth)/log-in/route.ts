@@ -26,9 +26,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "User doesn't exist" }, { status: 409 })
         }
         const token = createJWT(id.toString())
-        console.log(token)
         const isCookieSet = await setCookies(token);
-        console.log(isCookieSet)
         if (!isCookieSet) {
             return NextResponse.json({ message: "Server Error" }, { status: 500 })
         }
