@@ -17,7 +17,6 @@ export async function GET() {
             return NextResponse.json({message:"Unauthorized access"},{status:401})
         }      
         const isUserExist = await User.findById(new Types.ObjectId(id))
-        console.log(isUserExist)
         if(!isUserExist){
             return NextResponse.json({message:"User doesn't exist"},{status:400})
         }
