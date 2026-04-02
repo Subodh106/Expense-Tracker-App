@@ -1,6 +1,5 @@
 "use client"
 import { Separator } from '@radix-ui/react-separator'
-import React, { JSX } from 'react'
 import { Card, CardDescription, CardTitle } from '../ui/card'
 import { GroupIcon } from 'lucide-react'
 
