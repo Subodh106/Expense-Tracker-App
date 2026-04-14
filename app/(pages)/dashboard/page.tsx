@@ -7,6 +7,9 @@ import GroupsSection from "@/components/web/GroupsSection";
 import RecentExpenseSection from "@/components/web/Recent-Expense-Section";
 import PendingInvitesComponent from "@/components/web/PendingInvitesSection";
 import SettleUpSection from "@/components/web/SettleUpSection";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import CreateGroup from "@/components/web/CreateGroup";
+
 
 const DashboardPage = () => {
   return (
@@ -17,7 +20,14 @@ const DashboardPage = () => {
           <Separator className=" mb-3 mt-1 bg-black"/>
         </div>
         <div className="flex items-center justify-center gap-5 w-full max-w-md mx-auto ">
+          <Dialog>
+            <DialogTrigger asChild>
           <Button className="cursor-pointer hover:bg-green-500 bg-green-600"> <PlusIcon/> Create Group</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-sm">
+            <CreateGroup/>
+          </DialogContent>
+          </Dialog>
           <Button className="cursor-pointer" variant={"outline"}>View Invites</Button>
         </div>
       </div>
