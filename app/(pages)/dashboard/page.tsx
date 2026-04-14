@@ -6,7 +6,7 @@ import { GroupIcon, PlusIcon, Users, Users2, Users2Icon } from "lucide-react";
 import GroupsSection from "@/components/web/GroupsSection";
 import RecentExpenseSection from "@/components/web/Recent-Expense-Section";
 import PendingInvitesComponent from "@/components/web/PendingInvitesSection";
-import SettleUpSection from "@/components/web/SettlepSection";
+import SettleUpSection from "@/components/web/SettleUpSection";
 
 const DashboardPage = () => {
   return (
