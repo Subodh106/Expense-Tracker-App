@@ -9,7 +9,7 @@ const RecentExpenseSection = () => {
 
   return (
     <Card className="w-full shadow-sm">
-      <CardHeader className="">
+      <CardHeader>
         <CardTitle className="text-lg font-bold text-slate-800">Recent Expenses</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-0">
