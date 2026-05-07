@@ -5,7 +5,7 @@ import { GroupIcon } from 'lucide-react'
 
 const Overview = () => {
   return (
-    <div className="p-3 rounded-xl m-3 border-slate-200 shadow-sm bg-white">
+    <div className="p-3 rounded-xl  border-slate-200 shadow-sm bg-white">
         <h1 className="text-xl font-bold">Overview</h1>
         <Separator className="w-full mb-3 mt-1 bg-black"/>
         <div className="flex flex-col md:flex-row ld:flex-row items-center justify-center gap-5 cursor-pointer">
