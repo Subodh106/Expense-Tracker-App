@@ -12,8 +12,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     useEffect(()=>{
         getUserData();
     },[router])
-
-    console.log(router)
     const getUserData = async()=>{
         try {
             setLoading(true)
