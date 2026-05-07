@@ -9,7 +9,6 @@ import {
 export default function OweGroupCard() {
   return (
     <Card className="w-full max-w-sm md:max-w-xl overflow-hidden border-slate-200 shadow-sm flex flex-col min-h-55">
-      {/* 1. Top Section */}
       <div className="flex-1">
         <CardHeader className="pb-3">
           <CardTitle className="text-xl font-bold text-[#1e293b]">
@@ -35,8 +34,6 @@ export default function OweGroupCard() {
           </div>
         </CardContent>
       </div>
-
-      {/* 2. Bottom "Sticky" Section */}
       <div className="bg-[#fef2f2] p-4 border-t border-red-100">
         <p className="text-[#b91c1c] font-bold text-lg">
           You Owe: Rs. 300
