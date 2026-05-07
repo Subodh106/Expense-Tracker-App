@@ -6,7 +6,7 @@ import OwedGroupCard from './OwedGroupCard'
 
 const GroupsSection = () => {
   return (
-    <div className='GroupSection  p-3 rounded-xl m-3 border border-slate-200 bg-white'>
+    <div className='GroupSection  p-3 rounded-xl border border-slate-200 bg-white'>
         <div className="title flex justify-between">
             <span>
               <h1 className='font-bold text-lg'>
