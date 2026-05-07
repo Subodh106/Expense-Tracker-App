@@ -13,21 +13,14 @@ import CreateGroup from "@/components/web/CreateGroup";
 
 const DashboardPage = () => {
   return (
-    <div className="px-4 overflow-hidden bg-gray-100 h-full">
+    <div className="px-4 overflow-hidden bg-gray-100 h-full flex flex-col gap-3">
       <div>
         <div>
           <h1 className="text-2xl  font-bold"> Hello, Ray </h1>
           <Separator className=" mb-3 mt-1 bg-black"/>
         </div>
         <div className="flex items-center justify-center gap-5 w-full max-w-md mx-auto ">
-          <Dialog>
-            <DialogTrigger asChild>
-          <Button className="cursor-pointer hover:bg-green-500 bg-green-600"> <PlusIcon/> Create Group</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-sm">
-            <CreateGroup/>
-          </DialogContent>
-          </Dialog>
+          <CreateGroup/>
           <Button className="cursor-pointer" variant={"outline"}>View Invites</Button>
         </div>
       </div>
