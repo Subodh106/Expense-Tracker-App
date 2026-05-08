@@ -7,7 +7,6 @@ import GroupsSection from "@/components/web/GroupsSection";
 import RecentExpenseSection from "@/components/web/Recent-Expense-Section";
 import PendingInvitesComponent from "@/components/web/PendingInvitesSection";
 import SettleUpSection from "@/components/web/SettleUpSection";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import CreateGroup from "@/components/web/CreateGroup";
 
 
