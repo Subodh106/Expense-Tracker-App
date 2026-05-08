@@ -11,7 +11,6 @@ export async function POST(req:NextRequest) {
     try {
         await connectdb();
         const id = await getInfo()
-        console.log(id)
         if(!id){
             return NextResponse.json({message:"Unauthorized access"},{status:401})
         }
