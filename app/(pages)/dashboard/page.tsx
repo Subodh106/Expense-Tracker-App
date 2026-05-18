@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import Overview from "@/components/web/Overview";
 import { Separator } from "@/components/ui/separator";
-import { GroupIcon, PlusIcon, Users, Users2, Users2Icon } from "lucide-react";
 import GroupsSection from "@/components/web/GroupsSection";
 import RecentExpenseSection from "@/components/web/Recent-Expense-Section";
 import PendingInvitesComponent from "@/components/web/PendingInvitesSection";

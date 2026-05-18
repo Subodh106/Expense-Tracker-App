@@ -23,11 +23,11 @@ export async function POST(req:NextRequest) {
         if(!isUserExist){
             return NextResponse.json({message:"User doesn't exist"},{status:404})
         };
-        const isGroupExistWithUser = await Group.find({
+        const isGroupExistWithUser = await Group.findOne({
             group_name:group_name,
             created_by: new mongoose.Types.ObjectId(id)
         })
-        if(!isGroupExistWithUser){
+        if(isGroupExistWithUser){
             return NextResponse.json({message:"User already have group with this name. Please try other name!"},{status:401})
         }
         const createdGroup = await Group.create({

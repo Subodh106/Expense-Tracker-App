@@ -1,6 +1,5 @@
 
 import { ChevronRight } from 'lucide-react'
-import React from 'react'
 import OweGroupCard from './OweGroupCard'
 import OwedGroupCard from './OwedGroupCard'
 

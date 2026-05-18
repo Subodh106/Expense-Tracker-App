@@ -1,7 +1,7 @@
-"use client"
+"use client";
+
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -9,8 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Button } from "../ui/button";
 
+import { Button } from "../ui/button";
 import { PlusIcon } from "lucide-react";
 import { Field, FieldGroup } from "../ui/field";
 import { Label } from "../ui/label";
@@ -20,66 +20,83 @@ import axios from "axios";
 import { toast } from "sonner";
 
 const CreateGroup = () => {
-  const[groupName , setgroupName]=useState<string>("");
-  const [loading , setLoading]=useState(false);
-  const [serverErrors , setServerErrors]=useState<string>("");
+  const [groupName, setgroupName] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [serverErrors, setServerErrors] = useState<string>("");
+  const [open, setOpen] = useState(false);
 
-  const handleCreateGroup =async()=>{
+  const handleCreateGroup = async () => {
     setLoading(true);
+    setServerErrors("");
     try {
-      const response = await axios.post("/api/groups/create-group",{group_name:groupName});
-      if(response.status ===201){
+      const response = await axios.post("/api/groups/create-group", {
+        group_name: groupName,
+      });
+
+      if (response.status === 201) {
         toast.success("Group created successfully");
+        setOpen(false);
+        setgroupName("");
       }
-      } 
-      catch (error:any) {
-        setServerErrors(error?.response?.data?.message);
-      }
-    finally{
+    } catch (error: any) {
+      setServerErrors(
+        error?.response?.data?.message || "Something went wrong"
+      );
+    } finally {
       setLoading(false);
     }
-  }
+  };
+
   return (
-    <Dialog>
-      <form>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="cursor-pointer hover:bg-green-500 bg-green-600">
-          
           <PlusIcon /> Create Group
         </Button>
       </DialogTrigger>
+
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Create Group</DialogTitle>
           <DialogDescription>
-              Create your own group
+            Create your own group
           </DialogDescription>
         </DialogHeader>
+
         <FieldGroup>
           <Field>
             <Label htmlFor="group-name">Group Name</Label>
-          <Input
-          id="group-name"
-          name="group-name"
-          autoCorrect="group-name"
-          value={groupName}
-          onChange={(e)=>{setgroupName(e.target.value)}}
-          />
-          {serverErrors && <p className="text-sm text-red-500">{serverErrors}</p>}
+
+            <Input
+              id="group-name"
+              name="group-name"
+              value={groupName}
+              onChange={(e) => setgroupName(e.target.value)}
+            />
+
+            {serverErrors && (
+              <p className="text-sm text-red-500">{serverErrors}</p>
+            )}
           </Field>
         </FieldGroup>
+
         <DialogFooter>
-          <DialogClose  asChild>
-            <Button variant={"outline"}>Cancel</Button>
-          </DialogClose>
-          <DialogClose asChild disabled ={loading} >
-            <Button onClick={handleCreateGroup}>
-            <PlusIcon></PlusIcon>
-            Create Group</Button>
-          </DialogClose>
+          <Button
+            variant="outline"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            onClick={handleCreateGroup}
+            disabled={loading}
+          >
+            <PlusIcon />
+            {loading ? "Creating..." : "Create Group"}
+          </Button>
         </DialogFooter>
       </DialogContent>
-      </form>
     </Dialog>
   );
 };
