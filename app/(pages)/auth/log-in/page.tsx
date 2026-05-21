@@ -31,7 +31,8 @@ const LoginPage = () => {
       setLoading(true);
       setServerErrors("");
       const response = await axios.post("/api/user/log-in", data,)
-      if (response.status === 200) {
+      if (response.status ==200) {
+        console.log(response)
         reset();
         toast.success("Login successfully")
         router.push("/dashboard");

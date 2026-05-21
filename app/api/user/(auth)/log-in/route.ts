@@ -5,6 +5,7 @@ import { setCookies } from "@/helpers/setCookies";
 import { createJWT } from "@/helpers/createJwt";
 import { Group } from "@/models/Group.model";
 import { NextRequest,NextResponse } from "next/server";
+import { apiResponse } from "@/helpers/apiresponse";
 export async function POST(req: NextRequest) {
     try {
         await connectdb()
@@ -19,27 +20,21 @@ export async function POST(req: NextRequest) {
         }
         const isPasswordVerified = await verifyPassword(password, isUserExist.password);
         if (!isPasswordVerified) {
-            return NextResponse.json({ message: "Invalid credentails" }, { status: 401 })
+            return NextResponse.json({success:false,message: "Invalid credentails" }, { status: 401 })
         }
         const id = isUserExist?._id
         if (!id) {
-            return NextResponse.json({ message: "User doesn't exist" }, { status: 409 })
+            return NextResponse.json({success:false,message: "User doesn't exist" }, { status: 409 })
         }
         const token = createJWT(id.toString())
         const isCookieSet = await setCookies(token);
         if (!isCookieSet) {
-            return NextResponse.json({ message: "Server Error" }, { status: 500 })
+            return NextResponse.json({success:false,message: "Server Error" }, { status: 500 })
         }
-        const groups = await Group.find({"member.user_id":id})
-        return NextResponse.json({
-            message: "User logged in successfully", data: {
-                username: isUserExist.username,
-                email: isUserExist.email,
-                groups: groups,
-            }
-        }, { status: 200 })
+        // return new apiResponse(200,"User login successfully",)
+        return new apiResponse(true,200,"User login successfully")
     } catch (error: any) {
         console.log("Error during login user:", error.message)
-        return NextResponse.json({ message: "Error during login user", error: error.message }, { status: 500 })
+        return NextResponse.json({success:false, message: "Error during login user", error: error.message }, { status: 500 })
     }
 }
