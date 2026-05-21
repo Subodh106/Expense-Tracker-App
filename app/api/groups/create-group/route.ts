@@ -1,4 +1,5 @@
 import connectdb from "@/db/connectDb";
+import { apiResponse } from "@/helpers/apiresponse";
 import { getInfo } from "@/helpers/getinfo";
 import { Group } from "@/models/Group.model";
 import { User } from "@/models/User.model";
@@ -39,7 +40,7 @@ export async function POST(req:NextRequest) {
 
         })
         isUserExist.save();
-        return NextResponse.json({message:"Group created successfully",data:createdGroup},{status:201})
+        return new apiResponse(true,201,"Group created successfully");
     } catch (error:any) {
         console.log("Error during creating group:",error.message);
         return NextResponse.json({message:"Error durign creating group",error:error.message},{status:500})

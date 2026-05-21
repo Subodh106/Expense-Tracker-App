@@ -1,4 +1,5 @@
 import connectdb from "@/db/connectDb"
+import { apiResponse } from "@/helpers/apiresponse";
 import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model"
@@ -116,7 +117,9 @@ export async function POST(req: NextRequest,{params}:{params:Promise<{groupId:st
             return NextResponse.json({ message: `Internal Error druing creating expense` }, { status: 500 })
         };
         return NextResponse.json({ message: "Expense created successfully", data: expenseData }, { status: 201 });
-
+        return new apiResponse(true,201,"Expense created successfully",{
+            expenseData
+        });
     } catch (error: any) {
         console.log("Error during creating expense:", error.message)
         return NextResponse.json({ message: "Error during creating expense", error: error.message }, { status: 500 })

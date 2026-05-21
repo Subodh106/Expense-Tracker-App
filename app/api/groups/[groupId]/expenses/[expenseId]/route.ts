@@ -1,4 +1,5 @@
 import connectdb from "@/db/connectDb";
+import { apiResponse } from "@/helpers/apiresponse";
 import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model";
@@ -46,7 +47,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{groupId:stri
         if(!isExpenseExistInGroup){
             return NextResponse.json({message:"Expense doesn't exist in group"});
         };
-        return NextResponse.json({message:"Expense retrived successfully",data:isExpenseExist},{status:200});
+        return new apiResponse(true,200,"Expense retrived successfully",{isExpenseExist});
     } catch (error:any) {
         console.log("Error during retriving the expense:",error.message);
         return NextResponse.json({message:"Errror during retriving the expense",error:error.message},{status:500})
@@ -95,7 +96,7 @@ export async function DELETE(req: NextRequest ,{params}:{params:Promise<{groupId
         if (deltedExpense.acknowledged == false || deltedExpense.deletedCount === 0) {
             return NextResponse.json({ message: "Internal error" }, { status: 500 })
         }
-        return NextResponse.json({ message: "Expense deleted successfully" }, { status: 201 })
+        return new apiResponse(true,204,"Expense deleted successfully");
     } catch (error: any) {
         console.log("Error during deleting expense:", error.message);
         return NextResponse.json({ message: "Error during deleting expense", error: error.message }, { status: 500 })

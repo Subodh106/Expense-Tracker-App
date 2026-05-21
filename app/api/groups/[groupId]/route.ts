@@ -5,6 +5,7 @@ import { Group } from "@/models/Group.model";
 import { User } from "@/models/User.model";
 import { Expense } from "@/models/Expense.model";
 import { NextResponse} from "next/server";
+import { apiResponse } from "@/helpers/apiresponse";
 
 
 // for deleting group
@@ -49,7 +50,7 @@ export async function DELETE( _:any,{params}:{params:Promise<{groupId:string}>})
             return NextResponse.json({message:"Internal error"},{status:500
             })
         }
-        return NextResponse.json({message:"Group is deleted successfully"},{status:201})
+        return new apiResponse(true,204,"Group is deleted successfully")
     } catch (error:any) {
         console.log("Error during deleting group:",error.message);
         return NextResponse.json({message:"Error during deleting group",error:error.message},{status:500})
@@ -85,12 +86,12 @@ export async function GET(_:any,{params}:{params:Promise<{groupId:string}>}) {
         if(isExpenseExist.length===0){
             return NextResponse.json({message:"Expense doesn't exist"},{status:401})
         };
-        return NextResponse.json({message:"Expense retrived successfully",data:{
+        return new apiResponse(true,200,"Expensed retrived successfully",{
             groupId:isGroupExit._id,
             group_name:isGroupExit.group_name,
             member:isGroupExit.member,
             expenses:isExpenseExist
-        }},{status:200})
+        })
     } catch (error:any) {
         console.log("Error during getting expenses",error.message)
         return NextResponse.json({message:"Error during getting expenses",error:error.message},{status:500})
