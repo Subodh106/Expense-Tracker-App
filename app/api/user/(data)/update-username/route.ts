@@ -1,4 +1,5 @@
 import connectdb from "@/db/connectDb"
+import { apiResponse } from "@/helpers/apiresponse";
 import { getInfo } from "@/helpers/getinfo";
 import { User } from "@/models/User.model";
 import mongoose, { Types } from "mongoose";
@@ -28,7 +29,8 @@ export async function POST(request:NextRequest) {
         if(!updatedUser){
             return NextResponse.json({message:"Internal Error"},{status:500})
         };
-        return NextResponse.json({message:"Username Updated successfully"},{status:201});
+        // return NextResponse.json({message:"Username Updated successfully"},{status:201});
+        return new apiResponse(true,200,"Username changed successfully")
     } catch (error:any) {
         console.log("Error during updating user data:",error.message)
         return NextResponse.json({message:"Error during updating user data",error:error.message},{status:500})

@@ -4,6 +4,7 @@ import { User } from "@/models/User.model";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose, { Types } from "mongoose";
 import { GroupInvite } from "@/models/GroupInvites.model";
+import { apiResponse } from "@/helpers/apiresponse";
 
 export async function GET(req:NextRequest) {
     try {
@@ -27,7 +28,10 @@ export async function GET(req:NextRequest) {
         if(!pendingInvites){
             return NextResponse.json({message:"Pending invites doesn't exist"},{status:404})
         }
-        return NextResponse.json({message:"Invites retrived successfully",data:pendingInvites},{status:200})
+        // return NextResponse.json({message:"Invites retrived successfully",data:pendingInvites},{status:200})
+        return new apiResponse(true,200,"Invites retrived successfully",{
+            invites:pendingInvites
+        })
     } catch (error:any) {
         console.log("Error during getting invites:",error.message);
         return NextResponse.json({message:"Error during getting invites",error:error.message},{status:500});
