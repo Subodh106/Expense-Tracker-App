@@ -4,6 +4,7 @@ import { hashPassword } from "@/helpers/hashPassword";
 import { createJWT } from "@/helpers/createJwt";
 import { setCookies } from "@/helpers/setCookies";
 import { NextResponse , NextRequest } from "next/server";
+import { apiResponse } from "@/helpers/apiresponse";
 
 
 export async function POST(req:NextRequest) {
@@ -36,7 +37,7 @@ export async function POST(req:NextRequest) {
         if(!isCookieSet){
             return NextResponse.json({message:"Server Error"},{status:500})
         }
-        return NextResponse.json({message:"User successfully created",data:{username}},{status:201})
+        return new apiResponse(true,201,"User created successfully");
     } catch (error:any) {
         console.log("Error during creating user:",error.message)
         return NextResponse.json({message:"Error during creating user",error:error.message},{status:500})
