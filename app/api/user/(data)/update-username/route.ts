@@ -11,12 +11,10 @@ export async function POST(request:NextRequest) {
         await connectdb();
         const id= await getInfo() as string
         if(!mongoose.Types.ObjectId.isValid(id.toString())){
-            // return NextResponse.json({message:"Invalid id formate"},{status:400});?
             throw new ApiError(400,"Invalid id formate");
         }
         const isUserExist = await User.findById(new Types.ObjectId(id?.toString()));
         if(!isUserExist){
-            // return NextResponse.json({message:"User doesn't exist"},{status:404})
             throw new ApiError(404,"User doesn't exist");
         }
         const {searchParams} = new  URL(request.url);

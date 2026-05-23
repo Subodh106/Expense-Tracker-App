@@ -13,7 +13,6 @@ export async function POST(req:NextRequest) {
         await connectdb();
         const{username,email,password}=await req.json();
         if(username ==" " || email==" " || password==" "){
-            // return NextResponse.json({message:"Somthing is missing"},{status:422})
             throw new ApiError(422,"Something is missing");
         }
         const isUserExist = await User.findOne({email})
@@ -37,7 +36,6 @@ export async function POST(req:NextRequest) {
         const token = createJWT(id.toString());
         const isCookieSet = await setCookies(token);
         if(!isCookieSet){
-            // return NextResponse.json({message:"Server Error"},{status:500})
             throw new ApiError(500,"Internal server Error")
         }
         return new apiResponse(201,"User created successfully");

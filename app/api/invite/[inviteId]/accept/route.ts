@@ -1,4 +1,5 @@
 import connectdb from "@/db/connectDb";
+import { ApiError } from "@/helpers/apiError";
 import { apiResponse } from "@/helpers/apiresponse";
 import { getInfo } from "@/helpers/getinfo";
 import { Group } from "@/models/Group.model";
@@ -13,45 +14,44 @@ export async function PUT(req:NextRequest,{params}:{params:Promise<{inviteId:str
         const { inviteId } = await params;
         const id = await getInfo();
         if(!id){
-            return NextResponse.json({message:"Unauthorized access"},{status:401});
+            throw new ApiError(401,"Unauthorized access");
         }
         if(!Types.ObjectId.isValid(id?.toString())){
-            return NextResponse.json({message:"Invalid id formate"},{status:400});
+            throw new ApiError(400,"Invalid id formate");
         }
         const isUserExist = await User.findById(new Types.ObjectId(id?.toString()));
         if(!isUserExist){
-            return NextResponse.json({message:"User doesn't exist"},{status:404})
+            throw new ApiError(404,"User doesn't exist");
         }
         if(!Types.ObjectId.isValid(inviteId?.toString())){
-            return NextResponse.json({message:"Invalid id formate"},{status:400});
+            throw new ApiError(400,"Invalid id formate");
         };
         const isInviteExist = await GroupInvite.findById(new Types.ObjectId(inviteId?.toString()));
         if(!isInviteExist){
-            return NextResponse.json({message:"Invite doens't exsit"},{status:404});
+            throw new ApiError(404,"Invite doesn't exist");
         }
         if(!Types.ObjectId.isValid(isInviteExist.group_id?.toString())){
-            return NextResponse.json({message:"Invalid id formate"},{status:400});
+            throw new ApiError(400,"Invalid id formate");
         }
         const isUserAllowedToAccept = isInviteExist.invitedUser_id?.toString()===id;
         if(!isUserAllowedToAccept){
-            return NextResponse.json({message:"User isn't allowed to accept the invite"},{status:401});
+            throw new ApiError(401,"User isn't allowed to accept the invite");
         }
         const isGroupExist = await Group.findById(new Types.ObjectId(isInviteExist.group_id?.toString()));
         if(!isGroupExist){
-            return NextResponse.json({message:"Group doesn't exist"},{status:404});
+            throw new ApiError(404,"Group doesn't exist");
         }
-        // validate the invitedUser_id and add that id in group
         const invitedUser_id = isInviteExist.invitedUser_id?.toString();
         if(! Types.ObjectId.isValid(invitedUser_id)){
-            return NextResponse.json({message:"Invalid id formate"},{status:400})
+            throw new ApiError(400,"Invalid id formate");
         }
         const isInvitedUserExist = await User.findById(new Types.ObjectId(invitedUser_id));
         if(!isInvitedUserExist){
-            return NextResponse.json({message:"Invited User doesn't exist"},{status:404})
+            throw new ApiError(404,"Invited user doesn't exist");
         }
         const isInvitedUserAlreadyInThisGroup = isGroupExist.member.some((user:any)=> user.user_id?.toString()===isInvitedUserExist._id?.toString());
         if(isInvitedUserAlreadyInThisGroup){
-            return NextResponse.json({message:"Invited user already is in group"},{status:409})
+            throw new ApiError(409,"Invited user already is in group");
         }
 
         // updating group array
@@ -65,10 +65,9 @@ export async function PUT(req:NextRequest,{params}:{params:Promise<{inviteId:str
         // updating group invite status
         isInviteExist.status="accepted";
         isInviteExist.save();
-        // return NextResponse.json({message:"Accepted the request successfully"},{status:200});
         return new apiResponse(200,"Invite accepted successfully");
     } catch (error:any) {
         console.log("Error during accepting the invites:",error.message);
-        return NextResponse.json({message:"Error during accepting the invites",error:error.message},{status:500});
+        throw new ApiError(500,"Error during accepting the invite",error.message);
     }
 }

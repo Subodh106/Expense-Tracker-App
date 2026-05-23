@@ -47,7 +47,7 @@ export async function PATCH(req:NextRequest,{params}:{params:Promise<{inviteId:s
         isInviteExist.status="rejected";
         isInviteExist.save();
         // return NextResponse.json({message:"Rejected the request successfully"},{status:200});
-        return new apiResponse(true , 200,"Invited rejected successfully");
+        return new apiResponse(200,"Invited rejected successfully");
     } catch (error:any) {
         console.log("Error during accepting the invites:",error.message);
         return NextResponse.json({message:"Error during rejecting the invites",error:error.message},{status:500});
