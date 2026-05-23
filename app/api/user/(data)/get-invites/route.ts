@@ -29,7 +29,7 @@ export async function GET(req:NextRequest) {
             return NextResponse.json({message:"Pending invites doesn't exist"},{status:404})
         }
         // return NextResponse.json({message:"Invites retrived successfully",data:pendingInvites},{status:200})
-        return new apiResponse(true,200,"Invites retrived successfully",{
+        return new apiResponse(200,"Invites retrived successfully",{
             invites:pendingInvites
         })
     } catch (error:any) {

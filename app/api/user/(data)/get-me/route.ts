@@ -24,7 +24,7 @@ export async function GET() {
         
         const isUseringroups = await Group.find({"member.user_id":id});
         
-        return new apiResponse(true,200,"Data of user retrived successfully",{
+        return new apiResponse(200,"Data of user retrived successfully",{
             username:isUserExist.username,
             email:isUserExist.email,
             groups:isUserExist.groups

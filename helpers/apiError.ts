@@ -5,14 +5,14 @@ export class ApiError extends Error {
   data?: any;
 
   constructor(
-    success: boolean = false,
+    // success: boolean = false,
     status: number,
     message: string,
     data?: any,
   ) {
     super(
       JSON.stringify({
-        success,
+        success : false,
         message,
         data,
       }),
@@ -22,7 +22,7 @@ export class ApiError extends Error {
     this.headers = {
       "Content-Type": "application/json",
     };
-    this.success = success;
+    this.success = false;
     this.data = data;
   }
 }

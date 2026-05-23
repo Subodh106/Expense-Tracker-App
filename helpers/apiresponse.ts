@@ -2,14 +2,13 @@ import { NextResponse } from "next/server";
 
 export class apiResponse extends NextResponse {
   constructor(
-    success: boolean= true,
     status: number,
     message: string,
     data?: any,
   ) {
     super(
       JSON.stringify({
-        success,
+        success:true,
         message,
         data,
       }),
