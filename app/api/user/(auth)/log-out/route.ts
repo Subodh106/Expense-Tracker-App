@@ -2,7 +2,6 @@ import { ApiError } from "@/helpers/apiError";
 import { apiResponse } from "@/helpers/apiresponse";
 import { getInfo } from "@/helpers/getinfo";
 import { cookies } from "next/headers";
-import { NextResponse  } from "next/server";
 
 export async function POST() {
     try {
