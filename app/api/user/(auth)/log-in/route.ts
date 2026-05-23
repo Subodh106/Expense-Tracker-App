@@ -35,7 +35,6 @@ export async function POST(req: NextRequest) {
         return new apiResponse(true,200,"User login successfully");
     } catch (error: any) {
         console.log("Error during login user:", error.message)
-        // return NextResponse.json({success:false, message: "Error during login user", error: error.message }, { status: 500 })
         throw new ApiError(false,500,"Error during log in user",error.mesage);
     }
 }
