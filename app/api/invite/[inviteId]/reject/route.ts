@@ -1,4 +1,5 @@
 import connectdb from "@/db/connectDb";
+import { apiResponse } from "@/helpers/apiresponse";
 import { getInfo } from "@/helpers/getinfo";
 import { Group } from "@/models/Group.model";
 import { GroupInvite } from "@/models/GroupInvites.model";
@@ -45,7 +46,8 @@ export async function PATCH(req:NextRequest,{params}:{params:Promise<{inviteId:s
         }
         isInviteExist.status="rejected";
         isInviteExist.save();
-        return NextResponse.json({message:"Rejected the request successfully"},{status:200});
+        // return NextResponse.json({message:"Rejected the request successfully"},{status:200});
+        return new apiResponse(true , 200,"Invited rejected successfully");
     } catch (error:any) {
         console.log("Error during accepting the invites:",error.message);
         return NextResponse.json({message:"Error during rejecting the invites",error:error.message},{status:500});
