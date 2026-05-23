@@ -6,17 +6,18 @@ import { createJWT } from "@/helpers/createJwt";
 import { Group } from "@/models/Group.model";
 import { NextRequest,NextResponse } from "next/server";
 import { apiResponse } from "@/helpers/apiresponse";
+import { ApiError } from "@/helpers/apiError";
 export async function POST(req: NextRequest) {
     try {
         await connectdb()
         const { email, password } = await req.json();
         console.log(email,password)
         if (email == "" || password == "") {
-            return NextResponse.json({ message: "Something is missing" }, { status: 422 })
+            throw new ApiError(false,422,"Something is missing");
         }
         const isUserExist = await User.findOne({ email });
         if (!isUserExist) {
-            return NextResponse.json({ message: "User doesn't exist . Please create your account" }, { status: 401 })
+            throw new ApiError(false,401,"User doesn't Exist");
         }
         const isPasswordVerified = await verifyPassword(password, isUserExist.password);
         if (!isPasswordVerified) {
@@ -24,17 +25,17 @@ export async function POST(req: NextRequest) {
         }
         const id = isUserExist?._id
         if (!id) {
-            return NextResponse.json({success:false,message: "User doesn't exist" }, { status: 409 })
+            throw new ApiError(false,409,"User doens't exist");
         }
         const token = createJWT(id.toString())
         const isCookieSet = await setCookies(token);
         if (!isCookieSet) {
-            return NextResponse.json({success:false,message: "Server Error" }, { status: 500 })
+            throw new ApiError(false,500,"Internal server error");
         }
-        // return new apiResponse(200,"User login successfully",)
-        return new apiResponse(true,200,"User login successfully")
+        return new apiResponse(true,200,"User login successfully");
     } catch (error: any) {
         console.log("Error during login user:", error.message)
-        return NextResponse.json({success:false, message: "Error during login user", error: error.message }, { status: 500 })
+        // return NextResponse.json({success:false, message: "Error during login user", error: error.message }, { status: 500 })
+        throw new ApiError(false,500,"Error during log in user",error.mesage);
     }
 }
