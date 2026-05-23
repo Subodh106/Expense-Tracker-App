@@ -7,13 +7,13 @@ export async function POST() {
     try {
         const id = await getInfo();
         if (!id) {
-            throw new ApiError(false,401,"Unauthorized access")
+            throw new ApiError(401,"Unauthorized access")
         };
         const cookieStore = await cookies();
         cookieStore.delete("token");
-        return new apiResponse(true,200,"User logout successfully");
+        return new apiResponse(200,"User logout successfully");
     } catch (error: any) {
         console.log("Error during log out", error.message);
-        throw new ApiError(false,500,"Error during log out user",error.message)
+        throw new ApiError(500,"Error during log out user",error.message)
     }
 }

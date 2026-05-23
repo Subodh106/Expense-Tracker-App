@@ -29,7 +29,7 @@ export async function GET(req:NextRequest) {
         if(!groups){
             return NextResponse.json({message:"Groups doesn't exist"},{status:409})
         }
-        return new apiResponse(true,200,"Data of user successfully retrived",{
+        return new apiResponse(200,"Data of user successfully retrived",{
             username:isUserExist.username,
             email:isUserExist.email,
             groups:isUserExist.groups

@@ -5,6 +5,7 @@ import { createJWT } from "@/helpers/createJwt";
 import { setCookies } from "@/helpers/setCookies";
 import { NextResponse , NextRequest } from "next/server";
 import { apiResponse } from "@/helpers/apiresponse";
+import { ApiError } from "@/helpers/apiError";
 
 
 export async function POST(req:NextRequest) {
@@ -12,15 +13,16 @@ export async function POST(req:NextRequest) {
         await connectdb();
         const{username,email,password}=await req.json();
         if(username ==" " || email==" " || password==" "){
-            return NextResponse.json({message:"Somthing is missing"},{status:422})
+            // return NextResponse.json({message:"Somthing is missing"},{status:422})
+            throw new ApiError(422,"Something is missing");
         }
         const isUserExist = await User.findOne({email})
         if(isUserExist){
-            return NextResponse.json({message:"User already exist , Please login !"},{status:409})
+            throw new ApiError(409 , "User already exist , Please login !" )
         }
         const isUsernameUnique = await User.findOne({username});
         if(isUsernameUnique){
-            return NextResponse.json({message:"Username is already taken"},{status:409})
+            throw new ApiError(409,"Username is already taken!");
         }
         const hashedPassword= await hashPassword(password);
         const createdUser = await User.create({
@@ -30,16 +32,17 @@ export async function POST(req:NextRequest) {
         })
         const id = createdUser?._id;
         if(!id){
-            return NextResponse.json({message:"User creation failed"},{status:409})
+            throw new ApiError(409,"User creation failed");
         }
         const token = createJWT(id.toString());
         const isCookieSet = await setCookies(token);
         if(!isCookieSet){
-            return NextResponse.json({message:"Server Error"},{status:500})
+            // return NextResponse.json({message:"Server Error"},{status:500})
+            throw new ApiError(500,"Internal server Error")
         }
-        return new apiResponse(true,201,"User created successfully");
+        return new apiResponse(201,"User created successfully");
     } catch (error:any) {
         console.log("Error during creating user:",error.message)
-        return NextResponse.json({message:"Error during creating user",error:error.message},{status:500})
+        throw new ApiError(500,"Error during creating user",error.message)
     }
 }
