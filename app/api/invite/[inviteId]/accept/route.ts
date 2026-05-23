@@ -66,7 +66,7 @@ export async function PUT(req:NextRequest,{params}:{params:Promise<{inviteId:str
         isInviteExist.status="accepted";
         isInviteExist.save();
         // return NextResponse.json({message:"Accepted the request successfully"},{status:200});
-        return new apiResponse(true,200,"Invite accepted successfully");
+        return new apiResponse(200,"Invite accepted successfully");
     } catch (error:any) {
         console.log("Error during accepting the invites:",error.message);
         return NextResponse.json({message:"Error during accepting the invites",error:error.message},{status:500});

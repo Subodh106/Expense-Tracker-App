@@ -5,7 +5,6 @@ export class ApiError extends Error {
   data?: any;
 
   constructor(
-    // success: boolean = false,
     status: number,
     message: string,
     data?: any,
