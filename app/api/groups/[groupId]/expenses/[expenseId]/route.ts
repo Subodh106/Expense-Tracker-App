@@ -105,32 +105,148 @@ export async function DELETE(_:any,{params}:{params:Promise<{groupId:string,expe
     }
 }
 
-export async function PATCH(req:NextRequest,{params}:{params:Promise<{groupId:string,expenseId:string}>}){
-    try {
-        await connectdb();
-        const id = getInfo();
-        if(!id){
-            throw new ApiError(401,"Unauthorized access");
-        };
-        const {groupId,expenseId} = await params;
-        if(mongoose.Types.ObjectId.isValid(groupId && expenseId)){
-            throw new ApiError(400,"Invalid id formate");
-        }
-        const isgroupExist = await Group.findById(groupId);
-        if(!isgroupExist){
-            throw new ApiError(404,"Group doesn't exist");
-        }
-        const isExpenseExist = await Expense.findById(expenseId);
-        if(!isExpenseExist){
-            throw new ApiError(404,"Expense doesn't exist");
-        }
-        const isExpenseExistInGroup = isExpenseExist.group_id.toString() === isgroupExist._id.toString();
-        if(!isExpenseExist){
-            throw new ApiError(404,"Group doesn't contain this expense");
-        }
-        const {} = req.json();
-    } catch (error:any) {
-        console.log("Error during updating expense:",error.message);
-        throw new ApiError(500,"Error during updating expense",error.message);
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ groupId: string; expenseId: string }> }
+) {
+  try {
+    await connectdb();
+
+    // 1. Auth check
+    const id = await getInfo();
+    if (!id) {
+      throw new ApiError(401, "Unauthorized access");
     }
+
+    const { groupId, expenseId } = await params;
+
+    // 2. Validate IDs properly
+    if (
+      !mongoose.Types.ObjectId.isValid(groupId) ||
+      !mongoose.Types.ObjectId.isValid(expenseId)
+    ) {
+      throw new ApiError(400, "Invalid id format");
+    }
+
+    // 3. Fetch group
+    const group = await Group.findById(groupId);
+    if (!group) {
+      throw new ApiError(404, "Group doesn't exist");
+    }
+
+    // 4. Check user is in group
+    const isUserInGroup = group.member.some(
+      (user: any) => user.user_id.toString() === id.toString()
+    );
+
+    if (!isUserInGroup) {
+      throw new ApiError(403, "User is not a member of this group");
+    }
+
+    // 5. Fetch expense
+    const expense = await Expense.findById(expenseId);
+    if (!expense) {
+      throw new ApiError(404, "Expense doesn't exist");
+    }
+
+    // 6. Check expense belongs to group
+    const belongsToGroup =
+      expense.group_id.toString() === group._id.toString();
+
+    if (!belongsToGroup) {
+      throw new ApiError(400, "Expense doesn't belong to this group");
+    }
+
+    // 7. Permission check (only creator can edit)
+    const isAllowed =
+      expense.paid_by.toString() === id.toString();
+
+    if (!isAllowed) {
+      throw new ApiError(
+        403,
+        "You are not allowed to edit this expense"
+      );
+    }
+
+    // 8. Get request body
+    const body = await req.json();
+
+    // 9. Merge for validation (future state)
+    const updatedData = {
+      ...expense.toObject(),
+      ...body,
+    };
+
+    // 10. Validation
+
+    // amount must be positive
+    if (
+      updatedData.amount === undefined ||
+      updatedData.amount <= 0
+    ) {
+      throw new ApiError(400, "Amount must be greater than 0");
+    }
+
+    // title validation
+    if (!updatedData.title?.trim()) {
+      throw new ApiError(400, "Title is required");
+    }
+
+    // split validation
+    if (updatedData.split?.length) {
+      const splitTotal = updatedData.split.reduce(
+        (sum: number, split: { amount: number }) =>
+          sum + split.amount,
+        0
+      );
+
+      // check split values
+      const invalidSplit = updatedData.split.some(
+        (s: any) => s.amount <= 0
+      );
+
+      if (invalidSplit) {
+        throw new ApiError(
+          400,
+          "Split amounts must be greater than 0"
+        );
+      }
+
+      if (splitTotal !== updatedData.amount) {
+        throw new ApiError(
+          400,
+          "Split total must equal expense amount"
+        );
+      }
+    }
+
+    // 11. Allow only safe fields (VERY IMPORTANT)
+    const allowedUpdates: any = {};
+
+    if (body.title !== undefined) allowedUpdates.title = body.title;
+    if (body.amount !== undefined) allowedUpdates.amount = body.amount;
+    if (body.category !== undefined) allowedUpdates.category = body.category;
+    if (body.description !== undefined)
+      allowedUpdates.description = body.description;
+    if (body.split !== undefined) allowedUpdates.split = body.split;
+
+    // 12. Update DB
+    const updatedExpense = await Expense.findByIdAndUpdate(
+      expenseId,
+      allowedUpdates,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    // 13. Response
+    return NextResponse.json(
+      new apiResponse(200, "Expense updated successfully", updatedExpense)
+    );
+  } catch (error: any) {
+    console.log("Error during updating expense:", error.message);
+    throw new ApiError(500,"Error during updating expense",error.message);
+   }
 }
