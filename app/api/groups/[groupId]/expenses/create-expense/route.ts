@@ -1,4 +1,5 @@
 import connectdb from "@/db/connectDb"
+import { ApiError } from "@/helpers/apiError";
 import { apiResponse } from "@/helpers/apiresponse";
 import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
@@ -22,9 +23,12 @@ export async function POST(req: NextRequest,{params}:{params:Promise<{groupId:st
             return NextResponse.json({message:"User doesn't exist"},{status:404})
         }
         const {groupId} = await params;
-        const { split, total_amount, description } = await req.json();
+        const {title,category, split, total_amount, description } = await req.json();
         if (!groupId ||  total_amount <= 0) {
             return NextResponse.json({ message: "Something is missing" }, { status: 422 })
+        }
+        if(!title||!category){
+            throw new ApiError(404,"Title and Category is missing");
         }
         if(!mongoose.Types.ObjectId.isValid(groupId)){
             return NextResponse.json({message:"Invalid id formate"},{status:400})
@@ -105,6 +109,8 @@ export async function POST(req: NextRequest,{params}:{params:Promise<{groupId:st
 
         console.log(groupId)
         const expenseData = {
+            title:title,
+            category:category,
             group_id: groupId,
             paid_by: id,
             total_amount: total_amount,
@@ -116,10 +122,7 @@ export async function POST(req: NextRequest,{params}:{params:Promise<{groupId:st
         if (!created_Expense) {
             return NextResponse.json({ message: `Internal Error druing creating expense` }, { status: 500 })
         };
-        return NextResponse.json({ message: "Expense created successfully", data: expenseData }, { status: 201 });
-        return new apiResponse(true,201,"Expense created successfully",{
-            expenseData
-        });
+        return new apiResponse(201,"Expense created successfully",expenseData);
     } catch (error: any) {
         console.log("Error during creating expense:", error.message)
         return NextResponse.json({ message: "Error during creating expense", error: error.message }, { status: 500 })
