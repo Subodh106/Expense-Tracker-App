@@ -1,9 +1,11 @@
 import connectdb from "@/db/connectDb";
+import { ApiError } from "@/helpers/apiError";
 import { apiResponse } from "@/helpers/apiresponse";
 import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model";
 import { User } from "@/models/User.model";
+import { group } from "console";
 import { Types } from "mongoose";
 import mongoose from "mongoose";
 import { NextResponse , NextRequest } from "next/server";
@@ -47,7 +49,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{groupId:stri
         if(!isExpenseExistInGroup){
             return NextResponse.json({message:"Expense doesn't exist in group"});
         };
-        return new apiResponse(true,200,"Expense retrived successfully",{isExpenseExist});
+        return new apiResponse(200,"Expense retrived successfully",{isExpenseExist});
     } catch (error:any) {
         console.log("Error during retriving the expense:",error.message);
         return NextResponse.json({message:"Errror during retriving the expense",error:error.message},{status:500})
@@ -58,7 +60,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{groupId:stri
 
 
 // for deleting expense
-export async function DELETE(req: NextRequest ,{params}:{params:Promise<{groupId:string,expenseId:string}>}) {
+export async function DELETE(_:any,{params}:{params:Promise<{groupId:string,expenseId:string}>}) {
     try {
         await connectdb()
         const id = await getInfo();
@@ -96,9 +98,39 @@ export async function DELETE(req: NextRequest ,{params}:{params:Promise<{groupId
         if (deltedExpense.acknowledged == false || deltedExpense.deletedCount === 0) {
             return NextResponse.json({ message: "Internal error" }, { status: 500 })
         }
-        return new apiResponse(true,204,"Expense deleted successfully");
+        return new apiResponse(204,"Expense deleted successfully");
     } catch (error: any) {
         console.log("Error during deleting expense:", error.message);
         return NextResponse.json({ message: "Error during deleting expense", error: error.message }, { status: 500 })
+    }
+}
+
+export async function PATCH(req:NextRequest,{params}:{params:Promise<{groupId:string,expenseId:string}>}){
+    try {
+        await connectdb();
+        const id = getInfo();
+        if(!id){
+            throw new ApiError(401,"Unauthorized access");
+        };
+        const {groupId,expenseId} = await params;
+        if(mongoose.Types.ObjectId.isValid(groupId && expenseId)){
+            throw new ApiError(400,"Invalid id formate");
+        }
+        const isgroupExist = await Group.findById(groupId);
+        if(!isgroupExist){
+            throw new ApiError(404,"Group doesn't exist");
+        }
+        const isExpenseExist = await Expense.findById(expenseId);
+        if(!isExpenseExist){
+            throw new ApiError(404,"Expense doesn't exist");
+        }
+        const isExpenseExistInGroup = isExpenseExist.group_id.toString() === isgroupExist._id.toString();
+        if(!isExpenseExist){
+            throw new ApiError(404,"Group doesn't contain this expense");
+        }
+        const {} = req.json();
+    } catch (error:any) {
+        console.log("Error during updating expense:",error.message);
+        throw new ApiError(500,"Error during updating expense",error.message);
     }
 }
