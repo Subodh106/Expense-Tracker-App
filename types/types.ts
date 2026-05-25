@@ -19,6 +19,8 @@ interface groups{
 }
 
 export interface ExpenseType extends Document{
+    title:string,
+    category:string,
     group_id:Types.ObjectId,
     paid_by:Types.ObjectId,
     total_amount:number,

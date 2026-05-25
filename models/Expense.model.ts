@@ -1,7 +1,16 @@
 import mongoose,{Schema} from "mongoose";
 import { ExpenseType } from "@/types/types";
+import { string } from "zod";
 
 const ExpenseModel:Schema<ExpenseType> = new Schema({
+    title:{
+        type:String,
+        require:true
+    },
+    category:{
+        type:String,
+        requried:true
+    },
     group_id:{
         type:mongoose.Types.ObjectId,
         ref:"Group"
