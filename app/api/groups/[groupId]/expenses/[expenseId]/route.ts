@@ -5,7 +5,6 @@ import { getInfo } from "@/helpers/getinfo";
 import { Expense } from "@/models/Expense.model";
 import { Group } from "@/models/Group.model";
 import { User } from "@/models/User.model";
-import { group } from "console";
 import { Types } from "mongoose";
 import mongoose from "mongoose";
 import { NextResponse , NextRequest } from "next/server";
@@ -113,7 +112,7 @@ export async function PATCH(
   try {
     await connectdb();
 
-    // 1. Auth check
+    // Auth check
     const id = await getInfo();
     if (!id) {
       throw new ApiError(401, "Unauthorized access");
@@ -121,7 +120,7 @@ export async function PATCH(
 
     const { groupId, expenseId } = await params;
 
-    // 2. Validate IDs properly
+    //Validate IDs properly
     if (
       !mongoose.Types.ObjectId.isValid(groupId) ||
       !mongoose.Types.ObjectId.isValid(expenseId)
@@ -129,13 +128,13 @@ export async function PATCH(
       throw new ApiError(400, "Invalid id format");
     }
 
-    // 3. Fetch group
+    //Fetch group
     const group = await Group.findById(groupId);
     if (!group) {
       throw new ApiError(404, "Group doesn't exist");
     }
 
-    // 4. Check user is in group
+    //Check user is in group
     const isUserInGroup = group.member.some(
       (user: any) => user.user_id.toString() === id.toString()
     );
@@ -144,13 +143,13 @@ export async function PATCH(
       throw new ApiError(403, "User is not a member of this group");
     }
 
-    // 5. Fetch expense
+    //Fetch expense
     const expense = await Expense.findById(expenseId);
     if (!expense) {
       throw new ApiError(404, "Expense doesn't exist");
     }
 
-    // 6. Check expense belongs to group
+    // Check expense belongs to group
     const belongsToGroup =
       expense.group_id.toString() === group._id.toString();
 
@@ -158,7 +157,7 @@ export async function PATCH(
       throw new ApiError(400, "Expense doesn't belong to this group");
     }
 
-    // 7. Permission check (only creator can edit)
+    //Permission check (only creator can edit)
     const isAllowed =
       expense.paid_by.toString() === id.toString();
 
@@ -169,16 +168,16 @@ export async function PATCH(
       );
     }
 
-    // 8. Get request body
+    //Get request body
     const body = await req.json();
 
-    // 9. Merge for validation (future state)
+    //Merge for validation (future state)
     const updatedData = {
       ...expense.toObject(),
       ...body,
     };
 
-    // 10. Validation
+    // Validation
 
     // amount must be positive
     if (
@@ -221,7 +220,7 @@ export async function PATCH(
       }
     }
 
-    // 11. Allow only safe fields (VERY IMPORTANT)
+    // Allow only safe fields
     const allowedUpdates: any = {};
 
     if (body.title !== undefined) allowedUpdates.title = body.title;
@@ -231,7 +230,7 @@ export async function PATCH(
       allowedUpdates.description = body.description;
     if (body.split !== undefined) allowedUpdates.split = body.split;
 
-    // 12. Update DB
+    // 12. Updating DB
     const updatedExpense = await Expense.findByIdAndUpdate(
       expenseId,
       allowedUpdates,
@@ -240,8 +239,6 @@ export async function PATCH(
         runValidators: true,
       }
     );
-
-    // 13. Response
     return NextResponse.json(
       new apiResponse(200, "Expense updated successfully", updatedExpense)
     );
