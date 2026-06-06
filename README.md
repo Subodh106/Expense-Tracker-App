@@ -1,4 +1,7 @@
-Technology
-1. Next Js (fullstack)
-2. React Js (Frontend)
-4. MongoDB (DataBase)
+# Expense Trakcer App 🚀
+
+A full-stack expense tracking application built to manage daily expenses, monitor spending habits, and improve financial tracking.
+
+---
+
+# Features
