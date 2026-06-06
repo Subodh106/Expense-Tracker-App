@@ -45,7 +45,7 @@ Ui
 
 Clone the repository:
 
-git clone your-repository-link
+git clone https://github.com/Subodh106/Expense-Tracker-App.git
 
 Install dependencies:
 
@@ -54,3 +54,21 @@ npm install
 Run the development server:
 
 npm run dev
+
+---
+
+# 🎯 Future development
+- Creating expense , groups
+- updating and deleting expense and groups
+- and many other remaining features
+
+
+---
+
+# 👨‍💻 Author
+
+Built by Subodh while learning full-stack web development and backend engineering.
+
+# This is my first project which is not fully completed yet but in future it will be complete 
+
+
