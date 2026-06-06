@@ -69,6 +69,8 @@ npm run dev
 
 Built by Subodh while learning full-stack web development and backend engineering.
 
-# This is my first project which is not fully completed yet but in future it will be complete 
+---
+
+## This is my first project which is not fully completed yet but in future it will be complete 
 
 
