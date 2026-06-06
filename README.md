@@ -9,4 +9,48 @@ A full-stack expense tracking application built to manage daily expenses, monito
 
 ---
 
-# Features
+# ✨ Features
+- User Authentication (JWT)
+- Login & Registration
+- Protected Routes
+- Responsive Dashboard UI
+- MongoDB Database Integration
+ till now
+
+---
+
+# 🛠️ Tech Stack
+
+Frontend & Backend
+- Next.js
+
+DataBase
+- MongoDb
+
+Authentication
+- Jwt
+- bcrypt
+
+Form handling
+- React Hook Form
+
+Ui
+- Shadcn ui
+
+
+---
+
+#  ⚙️ Installation
+
+
+Clone the repository:
+
+git clone your-repository-link
+
+Install dependencies:
+
+npm install
+
+Run the development server:
+
+npm run dev
