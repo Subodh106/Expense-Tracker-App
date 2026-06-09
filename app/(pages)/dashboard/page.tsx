@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import Overview from "@/components/web/Overview";
 import { Separator } from "@/components/ui/separator";
@@ -6,19 +7,24 @@ import RecentExpenseSection from "@/components/web/Recent-Expense-Section";
 import PendingInvitesComponent from "@/components/web/PendingInvitesSection";
 import SettleUpSection from "@/components/web/SettleUpSection";
 import CreateGroup from "@/components/web/CreateGroup";
+import Link from "next/link";
+import { useUser } from "@/context/userContext";
 
 
 const DashboardPage = () => {
+  const {username} = useUser();
   return (
     <div className="px-4 overflow-hidden bg-gray-100 h-full flex flex-col gap-3">
       <div>
         <div>
-          <h1 className="text-2xl  font-bold"> Hello, Ray </h1>
+          <h1 className="text-2xl  font-bold"> Hello, {username}</h1>
           <Separator className=" mb-3 mt-1 bg-black"/>
         </div>
         <div className="flex items-center justify-center gap-5 w-full max-w-md mx-auto ">
           <CreateGroup/>
-          <Button className="cursor-pointer" variant={"outline"}>View Invites</Button>
+          <Link href="/invites">
+            <Button className="cursor-pointer" variant={"outline"}>View Invites</Button>
+          </Link>
         </div>
       </div>
         <Overview/>

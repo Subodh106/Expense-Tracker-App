@@ -1,8 +1,12 @@
-import React from 'react'
+"use client"
+import { useUser } from '@/context/userContext'
+import Navbar from '@/components/web/navbar';
 
 const page = () => {
   return (
-    <div>page</div>
+    <>
+    
+    </>
   )
 }
 
