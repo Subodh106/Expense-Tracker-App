@@ -5,8 +5,6 @@ import { getInfo } from "@/helpers/getinfo"
 import { Group } from "@/models/Group.model";
 import { User } from "@/models/User.model";
 import {Types} from "mongoose";
-import { NextResponse} from "next/server";
-
 export async function GET() {
     try {
         await connectdb()

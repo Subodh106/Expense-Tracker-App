@@ -16,8 +16,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     },[router])
     const getUserData = async()=>{
         try {
-            setLoading(true)
+            setLoading(true);
             const response = await getuser();
+            console.log(response)
             if(!response.user || !response.success){
                 router.push("/auth/log-in")
             }
