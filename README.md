@@ -49,11 +49,11 @@ git clone https://github.com/Subodh106/Expense-Tracker-App.git
 
 Install dependencies:
 
-npm install
+pnpm install
 
 Run the development server:
 
-npm run dev
+pnpm run dev
 
 ---
 
